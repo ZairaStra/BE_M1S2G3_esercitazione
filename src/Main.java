@@ -16,7 +16,7 @@ public class Main {
         Customer secondCustomer = new Customer(32453, "Umberto", 1);
         Customer thirdCustomer = new Customer(32579, "Ugo", 2);
         Customer fourthCustomer = new Customer(32784, "Fiammetta", 1);
-        Customer fifthCustomer = new Customer(32874, "Agostina", 4);
+        Customer fifthCustomer = new Customer(32874, "Agostina", 2);
 
         List<Product> products1 = List.of(
                 new Product(14165, "Sandman", "Books", 145.0),
@@ -65,6 +65,17 @@ public class Main {
                 System.out.println(product.getName() + ": " + product.getPrice() + " €")
         );
 
+        //es4 - lista prodotti ordinati da tier2
+        List<Product> productsOrderedCustomer2 = orders.stream()
+                .filter(order -> order.getCustomer().getTier() == 2)
+                .filter(order -> !order.getOrderDate().isBefore(LocalDate.of(2021, 2, 1)) &&
+                        !order.getOrderDate().isAfter(LocalDate.of(2021, 4, 1)))
+                .map(order -> order.getProducts().stream())
+                .toList();
 
+        System.out.println("I prodotti filtrati per livello utente 2 e data di ordine compresa tra 1/2/2021 e 1/4/2021 sono: ");
+        productsOrderedCustomer2.forEach(product ->
+                System.out.println(product.getName())
+        );
     }
 }
