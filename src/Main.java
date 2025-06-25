@@ -67,8 +67,8 @@ public class Main {
 
         //es4 - lista prodotti ordinati da tier2
         List<Product> productsOrderedCustomer2 = orders.stream()
-                .filter(order -> order.getCustomer().getTier() == 2)
-                .filter(order -> !order.getOrderDate().isBefore(LocalDate.of(2021, 2, 1)) &&
+                .filter(order -> order.getCustomer().getTier() == 2 &&
+                        !order.getOrderDate().isBefore(LocalDate.of(2021, 2, 1)) &&
                         !order.getOrderDate().isAfter(LocalDate.of(2021, 4, 1)))
                 //debrief:serve il flatMap perchè funzioni - rivediti cos'è
                 //.map(order -> order.getProducts().stream())
