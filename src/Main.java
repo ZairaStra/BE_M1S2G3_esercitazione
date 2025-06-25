@@ -39,6 +39,7 @@ public class Main {
 
         //es1 - lista da stream
         List<Product> expBooks = products1.stream()
+                //scrivo entrambi i filter in un'unica riga collegandoli con && pcosì mi risparmio un filtro
                 .filter(product -> product.getCategory().equals("Books") && product.getPrice() > 100)
                 .toList();
         System.out.println("I libri più costosi sono: ");
@@ -65,16 +66,16 @@ public class Main {
         );
 
         //es4 - lista prodotti ordinati da tier2
-//        List<Product> productsOrderedCustomer2 = orders.stream()
-//                .filter(order -> order.getCustomer().getTier() == 2)
-//                .filter(order -> !order.getOrderDate().isBefore(LocalDate.of(2021, 2, 1)) &&
-//                        !order.getOrderDate().isAfter(LocalDate.of(2021, 4, 1)))
-//                .map(order -> order.getProducts().stream())
-//                .toList();
-//
-//        System.out.println("I prodotti filtrati per livello utente 2 e data di ordine compresa tra 1/2/2021 e 1/4/2021 sono: ");
-//        productsOrderedCustomer2.forEach(product ->
-//                System.out.println(product.getName())
-//        );
+        List<Product> productsOrderedCustomer2 = orders.stream()
+                .filter(order -> order.getCustomer().getTier() == 2)
+                .filter(order -> !order.getOrderDate().isBefore(LocalDate.of(2021, 2, 1)) &&
+                        !order.getOrderDate().isAfter(LocalDate.of(2021, 4, 1)))
+                .flatMap(order -> order.getProducts().stream())
+                .toList();
+
+        System.out.println("I prodotti filtrati per livello utente 2 e data di ordine compresa tra 1/2/2021 e 1/4/2021 sono: ");
+        productsOrderedCustomer2.forEach(product ->
+                System.out.println(product.getName())
+        );
     }
 }
