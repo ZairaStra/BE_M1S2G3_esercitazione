@@ -1,15 +1,70 @@
+import entities.Customer;
+import entities.Order;
+import entities.Product;
+
+import java.time.LocalDate;
+import java.util.List;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        //creo utenti,prodotti e ordini finti
+
+        Customer firstCustomer = new Customer(32423, "Matilde", 3);
+        Customer secondCustomer = new Customer(32453, "Umberto", 1);
+        Customer thirdCustomer = new Customer(32579, "Ugo", 2);
+        Customer fourthCustomer = new Customer(32784, "Fiammetta", 1);
+        Customer fifthCustomer = new Customer(32874, "Agostina", 4);
+
+        List<Product> products1 = List.of(
+                new Product(14165, "Sandman", "Books", 145.0),
+                new Product(14167, "Seggiolino auto", "Baby", 99.7),
+                new Product(14146, "Papillon per bambino", "Boys", 22.0),
+                new Product(141794, "Mina Lima's Harry Potter", "Books", 118.0),
+                new Product(1416357, "Pallone da calcio Inter", "Toys", 24.9),
+                new Product(14165782, "Piccoli brividi", "Books", 17.5),
+                new Product(414165, "Skifidol", "Boys", 3.5),
+                new Product(1416714165, "Biberon", "Baby", 16.4)
+        );
+
+        Order firstOrder = new Order(32645269, "delivered", LocalDate.of(2021, 2, 2), LocalDate.of(2021, 2, 7), List.of(products1.get(1), products1.getLast()), thirdCustomer);
+        Order secondOrder = new Order(32645748, "ready for shipping", LocalDate.of(2021, 3, 25), LocalDate.of(2021, 3, 27), List.of(products1.get(0), products1.get(5), products1.getFirst()), firstCustomer);
+        Order thirdOrder = new Order(3264718, "shipped", LocalDate.of(2021, 3, 28), LocalDate.of(2021, 4, 1), List.of(products1.get(4), products1.get(2), products1.getFirst(), products1.get(7)), fifthCustomer);
+        Order fourthOrder = new Order(32642413, "shipped", LocalDate.of(2021, 3, 29), LocalDate.of(2021, 4, 4), List.of(products1.get(5), products1.get(6), products1.getFirst(), products1.get(2)), secondCustomer);
+
+        //insereisco gli ordini in una lista da usare per verificare la categoria
+        List<Order> orders = List.of(firstOrder, secondOrder, thirdOrder, fourthOrder);
+
+        //es1 - lista da stream
+        List<Product> expBooks = products1.stream()
+                .filter(p -> p.getCategory().equals("Books"))
+                .filter(p -> p.getPrice() > 100)
+                .toList();
+        System.out.println("I libri più costosi sono: ");
+        expBooks.forEach(p -> System.out.println(p.getName() + ": €" + p.getPrice()));
+
+        //es2 - lista ordini baby
+        List<Order> babyOrders = orders.stream()
+                .filter(order -> order.getProducts().stream()
+                        .anyMatch(product -> product.getCategory().equals("Baby")))
+                .toList();
+
+        System.out.println("Gli ordini con prodotti per l'infanzia sono: ");
+        babyOrders.forEach(order -> System.out.println(order.getId()));
+
+        //es3 - lista prodotti boys scontati EXNOVO - la devo ricreare modificando solo i dati che voglio cambire
+        List<Product> saleBoysOrders = products1.stream()
+                .filter(product -> product.getCategory().equals("Boys"))
+                .map(product -> new Product(product.getId(), product.getName(), product.getCategory(), product.getPrice() * 0.9))
+                .toList();
+
+        System.out.println("I prodotti per bambino scontati sono: ");
+        saleBoysOrders.forEach(product ->
+                System.out.println(product.getName() + ": " + product.getPrice() + " €")
+        );
+
+
     }
 }
