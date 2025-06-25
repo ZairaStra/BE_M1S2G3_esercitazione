@@ -70,6 +70,8 @@ public class Main {
                 .filter(order -> order.getCustomer().getTier() == 2)
                 .filter(order -> !order.getOrderDate().isBefore(LocalDate.of(2021, 2, 1)) &&
                         !order.getOrderDate().isAfter(LocalDate.of(2021, 4, 1)))
+                //debrief:serve il flatMap perchè funzioni - rivediti cos'è
+                //.map(order -> order.getProducts().stream())
                 .flatMap(order -> order.getProducts().stream())
                 .toList();
 
